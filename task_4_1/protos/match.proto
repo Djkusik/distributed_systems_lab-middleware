@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+
+enum WinConditions {
+    KILLED_ALL = 0;
+    TIMEOUT = 1;
+    BOMB_DEFUSED = 2;
+    BOMB_EXPLODED = 3;
+}
+
+message Team {
+    string name = 1;
+    int32 score = 2;
+    bool is_ct = 3;
+    repeated string alive_members = 4;
+}
+
+message SubscribeRequest {
+    string tournament = 1;
+    int32 frequency = 2;
+}
+
+message ScoreReply {
+    Team first_team = 1;
+    Team second_team = 2;
+    string score = 3;
+    WinConditions win_condition = 4;
+    string datetime = 5;
+}
+
+service ScoreNotifications {
+    rpc SubscribeToTournament (SubscribeRequest) returns (stream ScoreReply) {}
+}
